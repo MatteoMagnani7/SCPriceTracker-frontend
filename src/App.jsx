@@ -11,7 +11,8 @@ import {
   Area,
 } from "recharts";
 
-const EUR_USD_RATE = 0.92;
+// as today 1 January 2026
+const EUR_USD_RATE = 0.84;
 
 export default function App() {
   const [history, setHistory] = useState([]);
@@ -22,7 +23,7 @@ export default function App() {
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/prices");
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL);
       const data = await res.json();
       setHistory(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -105,21 +106,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#0a0c10] text-white font-sans selection:bg-blue-500/30 relative">
       {/* BACKGROUND IMAGE CON SFUMATURA */}
-      <div className="absolute top-0 left-0 w-full h-[600px] overflow-hidden z-0">
+      <div className="absolute top-0 left-0 w-full h-150 overflow-hidden z-0">
         <img
           src="background_image.jpg"
           className="w-full h-full object-cover opacity-50"
           alt="background"
         />
         {/* Maschera Gradiente: sfuma verso il basso e verso i lati */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0c10]/60 to-[#0a0c10]"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0c10] via-transparent to-[#0a0c10]"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#0a0c10]/60 to-[#0a0c10]"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-[#0a0c10] via-transparent to-[#0a0c10]"></div>
       </div>
 
       <div className="relative z-10 p-6 md:p-12">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* HERO SECTION (Svuotata del background solido per mostrare lo sfondo) */}
-          <div className="relative overflow-hidden rounded-3xl bg-white/[0.03] backdrop-blur-md border border-white/10 p-8 md:p-12 shadow-2xl">
+          <div className="relative overflow-hidden rounded-3xl bg-white/3 backdrop-blur-md border border-white/10 p-8 md:p-12 shadow-2xl">
             <div className="absolute top-0 right-0 p-4">
               <span className="bg-blue-600/20 text-blue-400 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-500/30 uppercase tracking-widest ">
                 {loading ? "Updating..." : "Lowest price this month"}
@@ -266,7 +267,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="h-[300px] w-full">
+              <div className="h-75 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={filteredChartData}>
                     <defs>
@@ -348,7 +349,7 @@ export default function App() {
                 </svg>
                 Recent History
               </h3>
-              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-4 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
                 {history.slice(0, 50).map((item, idx) => (
                   <div
                     key={item.id}
